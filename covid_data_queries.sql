@@ -149,7 +149,16 @@ ORDER BY
   1;
 
 -- Lets take a look at both of the datasets
--- Look at total population vs vaccinated
+-- Look at total population vs vaccinated as a rolling count and put it into a temp table
+CREATE TEMP TABLE popvax(
+  continent string,
+  location string,
+  date datetime,
+  population integer,
+  new_vaccinations integer,
+  rolling_vaccinated_total integer
+);
+INSERT INTO popvax
 SELECT
   deaths.continent,
   deaths.location,
@@ -164,6 +173,9 @@ JOIN
   ON deaths.location = vacc.location
   AND deaths.date = vacc.date
 WHERE
-  deaths.continent IS NOT NULL
-ORDER BY
-  1, 2;
+  deaths.continent IS NOT NULL;
+
+  SELECT
+    *
+  FROM
+    popvax;
